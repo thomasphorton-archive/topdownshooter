@@ -1,0 +1,31 @@
+{	
+	"environment": {
+		"deltaT": 25,
+		"friction": 0.05
+	},
+	"player": {
+		"weight": 1,
+		"acc": {
+			"base": 3,
+			"max" : 3,
+			"n"		: 0,
+			"s"		: 0,
+			"nety":	0,
+			"e" 	: 0,
+			"w"		: 0,
+			"netx":	0
+		},
+		"vel": {
+			"max": 6,
+			"x": 0,
+			"y": 0
+		},
+		"pos": {
+			"x": 400,
+			"y": 300
+		}
+	},
+	"cursor": {
+		
+	}
+}

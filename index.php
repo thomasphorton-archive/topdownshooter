@@ -3,56 +3,66 @@
 <head>
 <title>Game Test</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-<link rel="stylesheet" type="text/css" href="style/style.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <meta name="viewport" content="width=device-width; initial-scale=1.0">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		deltaT = 25;
-		friction = 0.05;
+		
 		canvas = $('#canvas');
-		player = $('#player');
-		player.weight = 1;
-		player.position = player.position();
+		var pc = $('#pc');
+	
 		
-		player.x = player.position.left;
-		player.y = player.position.top;
 		
-		player.accbase = 3;
-		player.accmax = 3;
-		player.accn = 0;
-		player.accs = 0;
-		player.accnetx = 0;
-		player.acce = 0;
-		player.accw = 0;
-		player.accnety = 0;
+		$.get("data.json", function(data){
+			
+			initialize(data);
+      setData(data);
+      //setToggles();
+      
+    }).error(function() { console.log('Server Error') });
+    
+    function setData(data){
+    	player = data.player;
+    	environment = data.environment;
+    };
+    
+    function initialize(data){
+	    pccoords = pc.position();
 		
-		player.velx = 0;
-		player.vely = 0;
-		player.velmax = 6;
+			data.player.pos.x = 400;
+			data.player.pos.y = 300;
+						
+			cursor = $('#cursor');
+			cursor.x = 0;
+			cursor.y = 0;
+			
+			debugCursorXPos = $('#cursorxpos');
+			debugCursorYPos = $('#cursorypos');
+			
+			debugSlope = $('#slope');
+			debugTheta = $('#theta');
+			
+			debugPlayerXPos = $('#playerxpos');
+			debugPlayerXVel = $('#playerxvel');
+			debugPlayerXAccE = $('#playerxacce');
+			debugPlayerXAccW = $('#playerxaccw');
+			debugPlayerXAcc = $('#playerxacc');
+			
+			debugPlayerYPos = $('#playerypos');
+			debugPlayerYVel = $('#playeryvel');
+			debugPlayerYAccN = $('#playeryaccn');
+			debugPlayerYAccS = $('#playeryaccs');
+			debugPlayerYAcc = $('#playeryacc');
+			
+			setInterval(function(){    
+	     updatePlayer();
+	     debug();
+     },data.environment.deltaT)
+    };
 		
-		cursor = $('#cursor');
-		cursor.x = 0;
-		cursor.y = 0;
 		
-		debugCursorXPos = $('#cursorxpos');
-		debugCursorYPos = $('#cursorypos');
-		
-		debugSlope = $('#slope');
-		debugTheta = $('#theta');
-		
-		debugPlayerXPos = $('#playerxpos');
-		debugPlayerXVel = $('#playerxvel');
-		debugPlayerXAccE = $('#playerxacce');
-		debugPlayerXAccW = $('#playerxaccw');
-		debugPlayerXAcc = $('#playerxacc');
-		
-		debugPlayerYPos = $('#playerypos');
-		debugPlayerYVel = $('#playeryvel');
-		debugPlayerYAccN = $('#playeryaccn');
-		debugPlayerYAccS = $('#playeryaccs');
-		debugPlayerYAcc = $('#playeryacc');
 		
 		function calculateAngle(){
 			slope = (cursor.y - player.y) / (cursor.x - player.x);
@@ -117,14 +127,14 @@
 			calculateHorizontal();
 			calculateVertical();
 
-			player.css({
+			pc.css({
 				'top' : player.y + 'px',
 				'left' : player.x + 'px',
 			})
 		};
 		
 		function spinPlayer(){
-			 player.css({
+			 pc.css({
 		   	'-webkit-transform': 'rotate(' + theta + 'deg)',
 		   	'-moz-transform': 'rotate(' + theta + 'deg)',
         '-ms-transform': 'rotate(' + theta + 'deg)',
@@ -191,10 +201,7 @@
   	
      });
      
-     setInterval(function(){    
-	     updatePlayer();
-	     debug();
-     },deltaT)
+     
 
 	})
 
@@ -227,9 +234,9 @@ cursor y pos: <span id="cursorypos">300</span><br />
 slope: <span id="slope">0</span><br />
 theta: <span id="theta">0</span><br />
 </div>
-<div id="canvas">
+<canvas id="canvas">
 <div id="cursor"></div>
-<img src="images/sprites/ship.png" id="player">
-</div>
+<div class="pc"></div>
+</canvas>
 </body>
 </html>
